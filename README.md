@@ -1,6 +1,8 @@
 # GoToAzure
 This is a sample project to provide a quick-start for Golang developers to experience the deployment to their Golang applications to Microsoft Azure Web Apps.
 
+[![Build Status](https://dev.azure.com/chunlingolab/GoToAzure/_apis/build/status/GoToAzure-Go%20(preview)-CI?branchName=master)](https://dev.azure.com/chunlingolab/GoToAzure/_build/latest?definitionId=8&branchName=master) [![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
+
 ## Section 1: Setup Build Pipeline
 1. Login to https://dev.azure.com;
 2. Click on the "+ New Project" button at the top-right corner (It may not be visible to you if you are not admin);
