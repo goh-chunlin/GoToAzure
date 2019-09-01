@@ -73,7 +73,7 @@ This is a sample project to provide a quick-start for Golang developers to exper
    ![](github-images/success.png?raw=true)
 
 ## Important Notes
-The reason why we need to have two tasks in the Release Pipeline to first stop the Web App after the new code is deployed is that if we do not stop the Web App first then the code cannot be deployed with the following error message.
+The reason why we need to have two tasks in the Release Pipeline to first stop the Web App before the new code is deployed is that if we do not stop the Web App first then the code cannot be deployed with the following error message.
 
 > Error: Error Code: ERROR_FILE_IN_USE
 > 
