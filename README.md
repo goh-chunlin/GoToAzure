@@ -91,6 +91,55 @@ func getPort() string {
 }
 ```
 
+## Containerization
+Whatever operating system we're using, the code that runs inside a container needs to be a Linux binary. Fortunately, this is really simple to obtain, thanks to the cross-compilation support in Golang.
+
+On Windows, we can use the following commands to do so on Windows PowerShell.
+```
+$ $env:GOOS = "linux"
+$ go build -o GoLab .
+```
+
+For simplicity, we can have Dockerfile as follows.
+```
+FROM scratch
+
+EXPOSE 80
+
+COPY GoToAzure /
+COPY static static
+
+ENV APPINSIGHTS_INSTRUMENTATIONKEY '' \
+    CONNECTION_STRING ''
+    
+CMD [ "/GoToAzure" ]
+```
+
+The first reason why I need to containerize my Golang web application on Azure Web App (there is [Azure Web App for Containers](https://azure.microsoft.com/en-in/services/app-service/containers/)) is because I want to use [wkhtmltopdf](https://wkhtmltopdf.org/). Hence, the following is the Dockerfile for this scenario.
+
+```
+FROM ubuntu:14.04
+
+EXPOSE 80
+
+RUN sed 's/main$/main universe/' -i /etc/apt/sources.list
+RUN apt-get update
+RUN apt-get upgrade -y
+
+# Download and install wkhtmltopdf
+RUN apt-get install -y build-essential xorg libssl-dev libxrender-dev wget gdebi
+RUN wget https://github.com/wkhtmltopdf/wkhtmltopdf/releases/download/0.12.5/wkhtmltox_0.12.5-1.trusty_amd64.deb --no-check-certificate
+RUN gdebi --n wkhtmltox_0.12.5-1.trusty_amd64.deb
+
+COPY GoToAzure /
+COPY static static
+
+ENV APPINSIGHTS_INSTRUMENTATIONKEY '' \
+    CONNECTION_STRING ''
+    
+CMD [ "/GoToAzure" ]
+```
+
 ## Contributions are Welcome!
 
 This project will continue to evolve. We will do modifications all the time as long as Azure DevOps and Azure Portal do not stop changing.
@@ -112,3 +161,7 @@ This project is supported by the [Azure Community Singapore (ACS)](https://www.m
 
 ## References
 - [Deploy Golang App to Azure Web Apps with CI/CD on DevOps](https://medium.com/golang-with-azure/after-we-have-our-code-on-github-repository-now-its-time-to-automate-our-builds-and-deployments-2e332790f3)
+- [openlabs/docker-wkhtmltopdf](https://github.com/openlabs/docker-wkhtmltopdf/blob/master/Dockerfile)
+- [Containerize Golang Code and Deploy to Azure Web App](https://medium.com/golang-with-azure/containerize-golang-code-and-deploy-to-azure-web-app-81cb1fac455c)
+- [How to Containerize Your Go Code](https://www.oreilly.com/library/view/how-to-containerize/9781491982310/)
+- [Push your first image to a private Docker container registry using the Docker CLI](https://docs.microsoft.com/en-us/azure/container-registry/container-registry-get-started-docker-cli)
