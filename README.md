@@ -99,7 +99,7 @@ Whatever operating system we're using, the code that runs inside a container nee
 On Windows, we can use the following commands to do so on Windows PowerShell.
 ```
 $ $env:GOOS = "linux"
-$ go build -o GoLab .
+$ go build -o GoToAzure .
 ```
 
 For simplicity, we can have Dockerfile as follows.
