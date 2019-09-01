@@ -28,7 +28,7 @@ func getPort() string {
 
 func render(response http.ResponseWriter, templateFileName string) {
 
-	templateFileName = fmt.Sprintf("static/views/%s", templateFileName)
+	templateFileName = fmt.Sprintf("static/templates/%s", templateFileName)
 	template, err := template.ParseFiles(templateFileName)
 
 	if err != nil {
