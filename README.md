@@ -142,10 +142,26 @@ ENV APPINSIGHTS_INSTRUMENTATIONKEY '' \
 CMD [ "/GoToAzure" ]
 ```
 
-## Steps to Deploy Containerized Golang App to Azure Web App for Containers
+## Steps to Deploy Containerized Golang App to Azure Web App for Containers from Local
 1. `$ go build -o GoToAzure .`;
 2. `$ docker image build -t gotoazurecontainerregistry.azurecr.io/image:v1`;
 3. `$ docker push gotoazurecontainerregistry.azurecr.io/image:v1`.
+
+## Steps to Setup Build and Release Pipelines in Azure DevOps for Containerized Golang App
+1. Please make sure you have an account on Azure Container Registry;
+2. Create a Build pipeline for Golang app (available as one of the Templates on Azure DevOps)
+   - Change the `go build` "Arguments" field to be `-o $(System.TeamProject) .`;
+   - Remove the "Archive files" and "Publish artifact" steps;
+   - Add the "Build Docker image" and "Push Docker image" steps;
+   - Check the checkbox "Include Latest Tag" for both "Build Docker image" and "Push Docker image" steps;
+   - Enter the Azure Container Registry information.
+3. Create a Release pipeline for deploying to Azure Web Apps (available as one of the Templates)
+   - Delete the default Artifact;
+   - Add a new Artifact with "Source type" changed to Azure Container Repository;
+   - Enter the Azure Container Registry information;
+   - Change the "App Service type" of the "Deploy Azure App Service" task to be "Web App for Containers (Linux)";
+   - Enter the Azure Container Registry information;
+   - Enter `latest` as the "Tag".
 
 ## Contributions are Welcome!
 
