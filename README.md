@@ -87,13 +87,13 @@ In the app.go, we have the getPort() function is to get the actual port used in 
 func getPort() string {
     p := os.Getenv("HTTP_PLATFORM_PORT")
     if p != "" {
-	      return ":" + p   
+        return ":" + p   
     }
     return ":80"
 }
 ```
 
-## Containerization
+## Section 4: Containerization
 Whatever operating system we're using, the code that runs inside a container needs to be a Linux binary. Fortunately, this is really simple to obtain, thanks to the cross-compilation support in Golang.
 
 On Windows, we can use the following commands to do so on Windows PowerShell.
@@ -142,26 +142,41 @@ ENV APPINSIGHTS_INSTRUMENTATIONKEY '' \
 CMD [ "/GoToAzure" ]
 ```
 
-## Steps to Deploy Containerized Golang App to Azure Web App for Containers from Local
+## Section 5: Steps to Deploy Containerized Golang App to Azure Web App for Containers from Local
 1. `$ go build -o GoToAzure .`;
 2. `$ docker image build -t gotoazurecontainerregistry.azurecr.io/image:v1`;
 3. `$ docker push gotoazurecontainerregistry.azurecr.io/image:v1`.
 
-## Steps to Setup Build and Release Pipelines in Azure DevOps for Containerized Golang App
+## Section 6: Steps to Setup Build Pipeline in Azure DevOps for Containerized Golang App
 1. Please make sure you have an account on Azure Container Registry;
-2. Create a Build pipeline for Golang app (available as one of the Templates on Azure DevOps)
-   - Change the `go build` "Arguments" field to be `-o $(System.TeamProject) .`;
-   - Remove the "Archive files" and "Publish artifact" steps;
-   - Add the "Build Docker image" and "Push Docker image" steps;
-   - Check the checkbox "Include Latest Tag" for both "Build Docker image" and "Push Docker image" steps;
-   - Enter the Azure Container Registry information.
-3. Create a Release pipeline for deploying to Azure Web Apps (available as one of the Templates)
-   - Delete the default Artifact;
-   - Add a new Artifact with "Source type" changed to Azure Container Repository;
-   - Enter the Azure Container Registry information;
-   - Change the "App Service type" of the "Deploy Azure App Service" task to be "Web App for Containers (Linux)";
-   - Enter the Azure Container Registry information;
-   - Enter `latest` as the "Tag".
+2. Using the Classic Editor, create a Build pipeline for Golang app (same as Steps 1 to 9 in Section 1 above);
+3. Change the `go build` "Arguments" field to be `-o $(System.TeamProject) .`;
+   ![](github-images/update-go-build-arguments.png?raw=true)
+4. Remove the "Archive files" and "Publish artifact" steps;
+5. Add two Docker tasks;
+   ![](github-images/add-docker-task.png?raw=true)
+6. Change the "Action" of the first Docker task to be "Build an image" and rename the step to be "Build Docker image". Also, change the "Action" of the second one to be "Push an image" and rename the step to be "Push Docker image";
+   ![](github-images/add-docker-steps.png?raw=true)
+6. Check the checkbox "Include Latest Tag" for both "Build Docker image" and "Push Docker image" steps;
+   ![](github-images/include-latest-tag.png?raw=true)
+7. Enter the Azure Container Registry information in both Docker steps;
+   ![](github-images/azure-container-registry.png?raw=true)
+8. Click "Save" under "Save & queue" dropdown;
+9. Done!
+
+## Section 7: Steps to Setup Release Pipeline in Azure DevOps for Containerized Golang App
+1. Continue from Section 3 above.
+2. Delete the default Artifact;
+3. Add a new Artifact with "Source type" changed to Azure Container Repository;
+   ![](github-images/add-new-artifact.png?raw=true)
+4. Enter the Azure Container Registry information for the Artifact;
+5. Change the "App Service type" of the "Deployment process" to be "Web App for Containers (Linux)" and enter the Azure Container Registry information below the field;
+   ![](github-images/change-app-service-type.png?raw=true)
+6. Click on the "Deploy Azure App Service" and find that the "App Service type" and Azure Container Registry information is copied over;
+7. Enter `latest` as the "Tag";
+   ![](github-images/latest-tag.png?raw=true)
+8. Click "Save" at the top right corner;
+9. Done!
 
 ## Contributions are Welcome!
 
