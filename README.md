@@ -144,7 +144,7 @@ CMD [ "/GoToAzure" ]
 
 ## Section 5: Steps to Deploy Containerized Golang App to Azure Web App for Containers from Local
 1. `$ go build -o GoToAzure .`;
-2. `$ docker image build -t gotoazurecontainerregistry.azurecr.io/image:v1`;
+2. `$ docker image build -t gotoazurecontainerregistry.azurecr.io/image:v1 .`;
 3. `$ docker push gotoazurecontainerregistry.azurecr.io/image:v1`.
 
 ## Section 6: Steps to Setup Build Pipeline in Azure DevOps for Containerized Golang App
