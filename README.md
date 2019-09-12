@@ -147,6 +147,8 @@ CMD [ "/GoToAzure" ]
 2. `$ docker image build -t gotoazurecontainerregistry.azurecr.io/image:v1 .`;
 3. `$ docker push gotoazurecontainerregistry.azurecr.io/image:v1`.
 
+Optional: If you want to run the container locally:  `docker container run -P gotoazurecontainerregistry.azurecr.io/image:v1`.
+
 ## Section 6: Steps to Setup Build Pipeline in Azure DevOps for Containerized Golang App
 1. Please make sure you have an account on Azure Container Registry;
 2. Using the Classic Editor, create a Build pipeline for Golang app (same as Steps 1 to 9 in Section 1 above);
